@@ -8,6 +8,6 @@ Deploy (via CI) to a Mesos or Kubernetes cluster.
 
 Autoscale.
 
-![img](funcatron.png)
+<img alt="img" src="funcatron.png" width="100%">
 
 Serverless? Kinda.
