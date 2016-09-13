@@ -2,10 +2,12 @@
 
 Write Java Functions (Funcs).
 
-Auto-write them to HTTP endpoints.
+Describe the endpoints with [Swagger](https://swagger.io).
 
 Deploy (via CI) to a Mesos or Kubernetes cluster.
 
 Autoscale.
+
+![img](funcatron.png)
 
 Serverless? Kinda.
