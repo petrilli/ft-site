@@ -2,6 +2,8 @@ title: Code of Conduct
 
 This code of conduct outlines our expectations for participants within the Funcatron community, as well as steps to reporting unacceptable behavior. We are committed to providing a welcoming and inspiring community for all and expect our code of conduct to be honored. Anyone who violates this code of conduct may be banned from the community.
 
+## The Code
+
 Our open source community strives to:
 
 1. Be friendly and patient.
@@ -29,7 +31,7 @@ We encourage everyone to participate and are committed to building a community f
 
 Although this list cannot be exhaustive, we explicitly honor diversity in age, gender, gender identity or expression, culture, ethnicity, language, national origin, political beliefs, profession, race, religion, sexual orientation, socioeconomic status, and technical ability. We will not tolerate discrimination based on any of the protected characteristics above, including participants with disabilities.
 
-Reporting Issues
+## Reporting Issues
 
 If you experience or witness unacceptable behavior—or have any other concerns—please report it by contacting us via funcatron+owner@groups.io. All reports will be handled with discretion. In your report please include:
 
@@ -43,6 +45,6 @@ If the person who is harassing you is part of the response team, they will recus
 
 Anyone asked to stop unacceptable behavior is expected to comply immediately. If an individual engages in unacceptable behavior, the representative may take any action they deem appropriate, up to and including a permanent ban from our community without warning.
 
-Thanks
+Thanks!
 
 This code of conduct is based on the [Open Code of Conduct v1.0](https://github.com/todogroup/opencodeofconduct) from the [TODOGroup](http://todogroup.org/).
