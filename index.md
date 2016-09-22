@@ -18,7 +18,7 @@ Each time the event happens, the function is applied and the function's
 return value is returned to the event source. An event could be an HTTP(S)
 request, something on an event queue, whatever.
 
-Functions are ephemeral. They existing for the duration of the application.
+Functions are ephemeral. They existing for the duration of the function call.
 Once the function returns a value, all of it's state and scope and everything
 else about it is assumed to go away.
 
@@ -64,9 +64,12 @@ Funcatron supports a "save, reload" model where the engineer saves a file
 non-compiled language), and their function endpoints are available. That's it.
 No uploading. No reconfiguration. No waiting. The endpoint is available on save.
 
-Further, that Funcatron model requires knowledge of two things:
-[Swagger](http://swagger.io) and how to write a simple function in Java, Scala,
-Clojure, Python, or JavaScript. That's it.
+Further, the Funcatron model requires knowledge of two things:
+
+* [Swagger](http://swagger.io)
+* How to write a simple function in Java, Scala, Clojure, Python, or JavaScript.
+
+**That's it.**
 
 The engineer defines the endpoints in Swagger and uses the `operationId` to
 specify the function (or class for Java and Scala) to apply when then endpoint
@@ -178,6 +181,8 @@ testing and debugging purposes.
 Every request has a unique ID and each log line includes the unique ID so it's
 possible to correlate a request as it moves across the cluster.
 
+<img alt="architecture" src="/images/arch.svg" width="100%">
+
 ## Project Status
 
 The project is in the initial development phase. Java and Scala Func bundles
@@ -185,7 +190,7 @@ are currently supported.
 
 ## Licenses and Support
 
-Funcatron is licensed under an Apache 2 license.
+Funcatron is triple licensed under an Apache 2, Eclipse, and LGPL, your choice.
 
 Support is available from the project's founder,
 [David Pollak](mailto:feeder.of.the.bears@gmail.com).
