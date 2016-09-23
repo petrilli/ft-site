@@ -90,9 +90,11 @@ test the function.
 
 ### Staging
 
-Funcatron code bundles (Funcs) contain a Swagger endpoint definition and the functions
+Funcatron code bundles (Funcs) contain a Swagger endpoint definition and the
+functions
 that are associated with the endpoint and any library code. For JVM languages,
-these are bundled into an Uber JAR. For Python, a [PEX](https://github.com/pantsbuild/pex)
+these are bundled into an Uber JAR. For Python, a
+[PEX](https://github.com/pantsbuild/pex)
 file. The Swagger definitions for an endpoint are unique based on
 host name and root path.
 
@@ -147,26 +149,25 @@ substrate." Each of the Funcatron components can be scaled independently with
 messages to the container substrate.
 
 For HTTP requests, Funcatron uses Nginx and Lua (via the
-[OpenResty](http://openresty.org/en/) project) to handle the requests. A small
-Lua script encodes the request as a payload that's sent to RabbitMQ. For large
+[OpenResty](http://openresty.org/en/) project) to handle the HTTP requests.
+A small
+Lua script encodes the request as a payload that's sent to a message broker
+(initially RabbitMQ, but this will be pluggable, e.g. Kafka). For large
 request or response bodies, the body will be written to a shared distributed
-filesystem (e.g., HDFS) and a reference to the file will be enqueued to
-RabbitMQ. For all but the highest volume installations, 2 Nginx instances
+filesystem (e.g., HDFS) and a reference to the file will be enqueued.
+For all but the highest volume installations, 2 Nginx instances
 should be sufficient.
 
-RabbitMQ is deployed on the cluster. RabbitMQ has well understood scaling
-characteristics and can handle high traffic loads.
-
-A "Tron" module dequeues the request from Nginx. Based on the queue depth
+A "Tron" module dequeues the request. Based on the queue depth
 for the "request firehose", the container substrate can launch more Trons.
 
 Based on the combination of `host` and `pathPrefix` attributes in the Swagger
 module definition, the Tron enqueues the request on the appropriate queue.
 
-A runner module dequeues messages from a number of host/pathPrefix queues and
+A Runner module dequeues messages from a number of host/pathPrefix queues and
 forwards the request to the appropriate Func. The runner then takes the function
 return value and appropriately encodes it and places it on the reply queue which
-dequeued by the original Nginx instance.
+dequeued by the original endpoint.
 
 Each Func can run multiple modules. Based on queue depth, queue service time,
 and CPU usage stats from the Funcs, more runners can be allocated on the substrate,
@@ -182,6 +183,44 @@ Every request has a unique ID and each log line includes the unique ID so it's
 possible to correlate a request as it moves across the cluster.
 
 <img alt="architecture" src="/images/arch.svg" width="100%">
+
+### Notes
+
+The initial implementation uses Nginx/OpenResty, RabbitMQ, Java/Scala, and Mesos
+to support HTTP requests. This is not "hardcoded" but pluggable. Specifically:
+
+* Anything that can enqueue a payload and dequeue the response can
+  work with the rest of Funcatron. The initial implementation is HTTP via
+  Nginx/OpenResty, but nothing in the rest of the system depends on what enqueues
+  the request and dequeues the response.
+* RabbitMQ is the initial message broker, but it could be Kafka or any other
+  message broker. This is pluggable.
+* Initially, dispatch from Runners to Funcs will be Java/Scala classes. But the
+  dispatch is also pluggable so other languages (Clojure) and
+  runtimes (Python, NodeJS) will be supported.
+* "But Swagger is HTTP only" well... yes and no... the verb and the scheme are
+  HTTP-specific, but they can be ignored... and by the time the request is
+  dequeued by the Runner, the origin (HTTP or something else) of the message
+  is irrelevant. The power of Swagger is two-fold:
+  * Excellent definitions of incoming and outgoing data shapes
+  * Great tooling and lots of general Swagger skills
+
+Because everything in Funcatron is asynchronous messages, how the messages are
+passed, where the message originate and where responses are dequeued are all
+pluggable and irrelevant to the other parts of the system.
+
+The key idea in Funcatron is the Func is a well defined bundle of functionality
+that's associated with a particular message signature that maps to well HTTP via
+host, pathPrefix, path, and verb, but could map to something else.
+
+It may be possible to chain Func invocations. I don't yet have a concrete
+design, but rather than enqueuing a Func return value as a response, it may
+be possible to package it as a request (the request body contains the Func
+return value) and forwarding it to another Func for further processing.
+
+Finally, if there's no `reply-to` field in a message, the Func is applied (invoked)
+but the results are discarded. This allows for side effects from the Func
+rather than just computation.
 
 ## Project Status
 
