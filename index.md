@@ -7,6 +7,9 @@ Serverless on Your Cluster:
 * Deploy to Mesos, Kubernets, or Swarm
 * Autoscale
 
+_Funcatron let's you deploy serverless on any cloud provider or in your
+private cloud. Focus on the functions, avoid vendor lock-in._
+
 This document sets out the goals for the [Funcatron](http://funcatron.org) project.
 
 ## What's Funcatron
@@ -19,17 +22,17 @@ return value is returned to the event source. An event could be an HTTP(S)
 request, something on an event queue, whatever.
 
 Functions are ephemeral. They existing for the duration of the function call.
-Once the function returns a value, all of it's state and scope and everything
+Once the function returns a value, all of its state and scope and everything
 else about it is assumed to go away.
 
 Scaling this kind of architecture is simple: the more frequently a function gets
 applied, the more compute resources are allocated to support the function...
 and [Bob's Your Uncle](https://en.wikipedia.org/wiki/Bob%27s_your_uncle).
 
-The current popular function runners (competitors to Amazon's Lambda) are
+The current popular function runners (competitors to Amazon's Lambda), however, are
 proprietary: when you write to the API for Lambda or Google's
 [Cloud Functions](https://cloud.google.com/functions/docs/),
-you're locked into that vendor.
+_**you're locked into that vendor**_.
 
 There's currently no (well, there's [OpenWhisk](https://developer.ibm.com/openwhisk/))
 generic way to do the auto-scale function thing on a private cloud or in a
@@ -52,7 +55,7 @@ Software goes through a lifecycle:
 - Production
 - Debugging
 
-A key driver for Funcatron is to address software at each stage of the lifecycle.
+Funcatron addresses software at each stage of the lifecycle.
 
 ### Authoring
 
