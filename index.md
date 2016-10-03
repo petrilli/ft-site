@@ -2,46 +2,47 @@
 
 Serverless on Your Cluster:
 
-* Define Endpoints in Swagger
-* Write Functions in Java, Scala, Clojure, Python, or JavaScript
+* Define endpoints in Swagger
+* Write functions in Java, Scala, Clojure, Python, or JavaScript
 * Deploy to Mesos, Kubernets, or Swarm
-* Autoscale
+* Scale automatically
 
 _Funcatron let's you deploy serverless on any cloud provider or in your
 private cloud. Focus on the functions, avoid vendor lock-in._
 
 This document sets out the goals for the [Funcatron](http://funcatron.org) project.
 
-## What's Funcatron
+## What is Funcatron?
 
 Amazon's [Lambda](https://aws.amazon.com/lambda/) popularized
 ["serverless"](http://www.martinfowler.com/articles/serverless.html)
-code deployment. It's dead simple: associate a "function" with an event.
+code deployment. It's simple and clean: associate a function with an event.
 Each time the event happens, the function is applied and the function's
 return value is returned to the event source. An event could be an HTTP(S)
 request, something on an event queue, whatever.
 
 Functions are ephemeral. They existing for the duration of the function call.
 Once the function returns a value, all of its state and scope and everything
-else about it is assumed to go away.
+else about it is assumed to go away. While this might sound like a disadvantage,
+it has some big advantages.
 
-Scaling this kind of architecture is simple: the more frequently a function gets
-applied, the more compute resources are allocated to support the function...
-and [Bob's Your Uncle](https://en.wikipedia.org/wiki/Bob%27s_your_uncle).
+Scaling this kind of architecture is simple. The lack of state between function 
+calls means the more frequently a function gets applied, the more compute 
+resources that can allocated to support the function
+and [Bob's Your Uncle](https://en.wikipedia.org/wiki/Bob%27s_your_uncle). 
 
-The current popular function runners (competitors to Amazon's Lambda), however, are
+The current popular serverless infrastructures (competitors to Amazon's Lambda) are
 proprietary: when you write to the API for Lambda or Google's
 [Cloud Functions](https://cloud.google.com/functions/docs/),
-_**you're locked into that vendor**_.
-
+_**you're locked into that vendor**_. 
 There's currently no (well, there's [OpenWhisk](https://developer.ibm.com/openwhisk/))
 generic way to do the auto-scale function thing on a private cloud or in a
-way that can migrate from one cloud provider to another.
+way that can migrate between, or span, multiple cloud providers and internal 
+infrastructure.
 
-Funcatron addresses this. Funcatron is a cloud-provider-neutral mechanism for
-developing, testing, and deploying auto-scalable functions.
-
-Funcatron is designed to run on container orchestration clusters:
+Funcatron addresses this. Funcatron provides a cloud-provider-neutral mechanism for
+developing, testing, and deploying auto-scalable functions. Funcatron is designed 
+to run on multiple container orchestration clusters:
 [Mesos](https://mesosphere.com/), [Kubernetes](http://kubernetes.io/), or
 [Docker Swarm](https://docker.com).
 
@@ -109,7 +110,7 @@ behaviors across test, staging, and production servers.
 
 ### Production
 
-Funcatron allows simple deployment and undeployment of end-point collections
+Funcatron allows simple deployment and rollback of end-point collections
 defined in Swagger files and implemented in a JVM language, Python, or NodeJS.
 
 Requests are forwarded from Nginx via a message queue to a dispatcher (a Tron).
@@ -143,7 +144,7 @@ This data can be used for testing or debugging.
 
 ## Architecture
 
-Funcatron has some ambitious goals... and has an architecture to facilitate
+Funcatron has some ambitious goals and has an architecture to facilitate
 achieving these goals.
 
 In all but development mode, Funcatron runs on a Docker container orchestration
